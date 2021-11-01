@@ -1,0 +1,74 @@
+
+service: contacts
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+
+  environment:
+    CONTACTS_TABLE: ${self:service}-table-${opt:stage}
+  
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan*
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:service}-table-${opt:stage}"
+
+functions:
+  createContact:
+    handler: src/lambda/http/createContact.handler
+    events:
+      - http:
+          path: /v1/contacts
+          method: post
+  
+  listContacts:
+    handler: src/lambda/http/listContacts.handler
+    events:
+      - http:
+          path: /v1/contacts
+          method: get
+  
+  getContact:
+    handler: src/lambda/http/getContact.handler
+    events:
+      - http:
+          path: /v1/contacts/{id}
+          method: get
+  
+  updateContact:
+    handler: src/lambda/http/updateContact.handler
+    events:
+      - http:
+          path: /v1/contacts/{id}
+          method: put
+
+  deleteContact:
+    handler: src/lambda/http/deleteContact.handler
+    events:
+      - http:
+          path: /v1/contacts/{id}
+          method: delete
+
+resources:
+  Resources:
+    ContactsTable: 
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:service}-table-${opt:stage}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

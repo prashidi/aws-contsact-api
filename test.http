@@ -1,0 +1,25 @@
+POST https://eb1z2ig7r5.execute-api.us-east-1.amazonaws.com/dev/v1/contacts
+Content-Type: application/json
+
+{
+  "name": "King Kikomba",
+  "email": "king@example.com",
+  "phone": "222-222-2222"
+}
+
+###
+GET https://eb1z2ig7r5.execute-api.us-east-1.amazonaws.com/dev/v1/contacts
+
+###
+GET https://eb1z2ig7r5.execute-api.us-east-1.amazonaws.com/dev/v1/contacts/3976d1a4-d942-4034-9000-9b79596114af
+
+###
+PUT https://eb1z2ig7r5.execute-api.us-east-1.amazonaws.com/dev/v1/contacts/3976d1a4-d942-4034-9000-9b79596114af
+Content-Type: application/json
+
+{
+  "name": "Benjamin Smile"
+}
+###
+
+DELETE https://eb1z2ig7r5.execute-api.us-east-1.amazonaws.com/dev/v1/contacts/3976d1a4-d942-4034-9000-9b79596114af
